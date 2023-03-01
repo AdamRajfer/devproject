@@ -139,7 +139,7 @@ def project(args: Namespace) -> None:
             maxcolwidths = [None, *MAX_COL_WIDTHS]
         else:
             df = pd.DataFrame(
-                [[""] * 7], columns=COLUMNS, index=[""]
+                [[""] * len(COLUMNS)], columns=COLUMNS, index=[""]
             ).astype(str)
             maxcolwidths = MAX_COL_WIDTHS
         df.columns = [f"\033[93m{x}\033[0m" for x in df.columns]
