@@ -1,0 +1,13 @@
+{
+    "build": {"dockerfile": "Dockerfile"},
+    "runArgs": ["--network", "host", "--gpus", "all"],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "matangover.mypy",
+                "eamodio.gitlens"
+            ]
+        }
+    }
+}
