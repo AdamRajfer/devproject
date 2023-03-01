@@ -17,23 +17,28 @@ def run(args: Namespace) -> None:
     remote_dir = f"{remote_src_dir}/.devprojects"
     if not os.path.exists(f"{get_local_dir()}/{args.project}"):
         raise ValueError(f"Project {args.project} does not exist.")
+    connection = f"{get_user()}@{config['host']}:" if config["gateway"] else ""
     assert not subprocess.call(
-        f"rsync -a {get_local_dir()}/" \
-        f" {get_user()}@{config['host']}:{remote_dir}/",
-        shell=True,
+        f"rsync -a {get_local_dir()}/ {connection}{remote_dir}/", shell=True
     )
+    connection = (
+        f"ssh {get_user()}@{config['host']} " if config["gateway"] else "eval '"
+    )
+    end = "" if config["gateway"] else "'"
     assert not subprocess.call(
-        f"ssh {get_user()}@{config['host']} sed -i" \
+        f"{connection}sed -i" \
         f" -e 's:SRC_DIR:{remote_src_dir_bash}:g'" \
         f" -e 's:SRC_USER:$(id -un):g'" \
         f" -e 's:SRC_UID:$(id -u):g'" \
         f" -e 's:SRC_GID:$(id -g):g'" \
-        f" {remote_dir}/*/.devcontainer/*",
+        f" {remote_dir}/*/.devcontainer/*{end}",
         shell=True,
     )
+    connection = (
+        f"vscode-remote://ssh-remote+{get_user()}@{config['host']}"
+        if config["gateway"] else ""
+    )
     assert not subprocess.call(
-        f"code --folder-uri" \
-        f" vscode-remote://ssh-remote+{get_user()}@{config['host']}" \
-        f"{remote_dir}/{args.project}",
+        f"code --folder-uri {connection}{remote_dir}/{args.project}",
         shell=True,
     )

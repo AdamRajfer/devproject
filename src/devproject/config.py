@@ -19,7 +19,6 @@ def config(args: Namespace) -> None:
         else:
             if args.name not in config:
                 assert args.deployment_path
-                assert args.gateway
                 config[args.name] = {
                     "name": args.name,
                     "deployment_path": str(args.deployment_path),
@@ -34,7 +33,7 @@ def config(args: Namespace) -> None:
     config = (
         pd.DataFrame(config).T[columns] if config
         else pd.DataFrame(columns=columns)
-    )
+    ).fillna("-")
     is_active = config["active"].apply(eval)
     config[is_active] = config[is_active].squeeze().apply(
         lambda x: f"\033[92m{x}\033[0m"
