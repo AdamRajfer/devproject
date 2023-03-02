@@ -1,13 +1,8 @@
-import getpass
 import json
 import os
 from typing import Dict
 
 CONFIG_PATH = f"{os.path.expanduser('~')}/.devprojects/.config.json"
-
-
-def get_user() -> str:
-    return getpass.getuser()
 
 
 def get_git_username() -> str:
