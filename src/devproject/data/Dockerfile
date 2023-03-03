@@ -3,7 +3,7 @@ WORKDIR SRC_WORKDIR
 RUN groupadd -o --gid SRC_GID SRC_USER \
     && useradd --uid SRC_UID --gid SRC_GID -m SRC_USER \
     && apt-get update \
-    && apt-get install sudo \
+    && apt-get install bash-completion sudo \
     && echo SRC_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/SRC_USER \
     && chmod 0440 /etc/sudoers.d/SRC_USER
 USER SRC_USER
