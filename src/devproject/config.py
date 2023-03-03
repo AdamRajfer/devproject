@@ -1,4 +1,5 @@
 from argparse import Namespace
+from typing import Any, Dict, Union
 
 import pandas as pd
 from tabulate import tabulate
@@ -8,7 +9,7 @@ from devproject.utils import get_config, save_config
 
 def config(args: Namespace) -> None:
     try:
-        config = get_config()
+        config: Union[pd.DataFrame, Dict[str, Any]] = get_config()
     except FileNotFoundError:
         config = {}
     if args.name:

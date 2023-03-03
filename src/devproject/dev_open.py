@@ -1,18 +1,15 @@
 import subprocess
 from argparse import Namespace
 
-from devproject.utils import get_config
+from devproject.utils import get_config, get_host
 
 
 def dev_open(args: Namespace) -> None:
     config = get_config()[args.config]
-    host = config["host"]
-    if host == "sync":
-        host = subprocess.getoutput(
-            f"ssh {config['gateway']} 'HOST=$(squeue -u $USER --states R" \
-            f" -O nodelist --noheader | head -n 1); echo $HOST'"
-        )
-    assert not subprocess.call(
-        f"code --folder-uri vscode-remote://ssh-remote+{host}{args.directory}",
-        shell=True,
-    )
+    host = get_host(config)
+    cmd = "code --folder-uri"
+    if host:
+        cmd = f"{cmd} vscode-remote://ssh-remote+{host}{args.directory}"
+    else:
+        cmd = f"{cmd} {args.directory}"
+    assert not subprocess.call(cmd, shell=True), "Bash command failed."
