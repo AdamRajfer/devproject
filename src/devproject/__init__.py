@@ -7,8 +7,10 @@ from argparse import (ArgumentDefaultsHelpFormatter, ArgumentParser,
 import argcomplete
 
 from devproject.config import config
+from devproject.configs import configs
 from devproject.dev_open import dev_open
 from devproject.project import project
+from devproject.projects import projects
 from devproject.run import run
 from devproject.utils import get_config
 
@@ -22,13 +24,14 @@ def _formater_class(prog: str) -> HelpFormatter:
 def dev() -> None:
     parser = ArgumentParser(formatter_class=_formater_class, add_help=False)
     parser.add_argument(
-        "command", choices=["project", "config", "run", "open"]
+        "command",
+        choices=["project", "projects", "config", "configs", "run", "open"],
     )
     argcomplete.autocomplete(parser)
     args, rest = parser.parse_known_args()
     if args.command == "project":
         parser = ArgumentParser(formatter_class=_formater_class)
-        parser.add_argument("--name", type=str, help="project name")
+        parser.add_argument("name", type=str, help="project name")
         parser.add_argument(
             "--base-image",
             type=str,
@@ -69,9 +72,11 @@ def dev() -> None:
         )
         argcomplete.autocomplete(parser)
         project(parser.parse_args(rest))
+    elif args.command == "projects":
+        projects()
     elif args.command == "config":
         parser = ArgumentParser(formatter_class=_formater_class)
-        parser.add_argument("--name", type=str, help="configuration name")
+        parser.add_argument("name", type=str, help="configuration name")
         parser.add_argument(
             "--deployment-path",
             type=pathlib.Path,
@@ -90,6 +95,8 @@ def dev() -> None:
         )
         argcomplete.autocomplete(parser)
         config(parser.parse_args(rest))
+    elif args.command == "configs":
+        configs()
     elif args.command == "run":
         parser = ArgumentParser(formatter_class=_formater_class)
         parser.add_argument("project", type=str, help="project name")

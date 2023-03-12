@@ -1,10 +1,23 @@
 import json
 import os
 import subprocess
-from argparse import Namespace
 from typing import Any, Dict, Optional
 
+import pandas as pd
+from tabulate import tabulate
+
 CONFIG_PATH = f"{os.path.expanduser('~')}/.devprojects/.config.json"
+COLUMNS = [
+    "name",
+    "base_image",
+    "workdir",
+    "install_req",
+    "req_depth",
+    "git",
+    "mount",
+    "datetime",
+]
+MAX_COL_WIDTHS = [25, 25, 25, None, 25, 25, 25, 25]
 
 
 def get_git_username() -> str:
@@ -52,3 +65,25 @@ def save_config(config: Dict[str, Dict[str, str]]) -> None:
     os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
     with open(CONFIG_PATH, "w") as stream:
         json.dump(config, stream, indent=4)
+    columns = ["name", "deployment_path", "gateway", "host", "active"]
+    config_df = (
+        pd.DataFrame(config).T[columns] if config
+        else pd.DataFrame(columns=columns)
+    ).fillna("-")
+    is_active = config_df["active"].apply(eval)
+    config_df[is_active] = config_df[is_active].squeeze().apply(
+        lambda x: f"\033[92m{x}\033[0m"
+    ).tolist()
+    config_df.columns = [f"\033[93m{x}\033[0m" for x in config_df.columns]
+    config_df = config_df.reset_index(drop=True)
+    config_df.index += 1
+    config_df.index = [f"\033[96m{x}\033[0m" for x in config_df.index]
+    print(tabulate(
+        config_df,
+        headers="keys",
+        tablefmt="fancy_grid",
+        rowalign="center",
+        stralign="center",
+        numalign="center",
+        showindex=True,
+    ))
