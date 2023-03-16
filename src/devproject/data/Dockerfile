@@ -9,7 +9,8 @@ WORKDIR /home/SRC_USER
 COPY .bashrc .bash_logout .profile ./
 USER SRC_USER
 RUN sudo chown SRC_USER:SRC_GID .bashrc .bash_logout .profile \
-    && pip install mypy \
+    && pip install --upgrade pip \
+    && pip install mypy isort black \
     && git config --global user.name SRC_GIT_USER \
     && git config --global user.email SRC_GIT_EMAIL \
     && git config --global --add safe.directory SRC_WORKSPACE \

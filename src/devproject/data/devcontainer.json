@@ -9,6 +9,7 @@
                 "ms-python.python",
                 "matangover.mypy",
                 "ms-python.isort",
+                "ms-python.black-formatter",
                 "eamodio.gitlens"
             ]
         }
