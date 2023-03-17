@@ -17,5 +17,7 @@ RUN sudo chown SRC_USER:SRC_GID .bashrc .bash_logout .profile \
     && echo .devcontainer/ >> .gitignore \
     && echo .devtmp/ >> .gitignore \
     && git config --global core.excludesfile /home/SRC_USER/.gitignore \
-    && curl -fsSL https://get.docker.com | sh
+    && curl -fsSL https://get.docker.com | sh \
+    && (genent group docker || sudo groupadd docker) \
+    && sudo usermod -aG docker SRC_USER
 WORKDIR SRC_WORKDIR
