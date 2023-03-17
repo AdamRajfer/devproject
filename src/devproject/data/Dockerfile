@@ -16,5 +16,6 @@ RUN sudo chown SRC_USER:SRC_GID .bashrc .bash_logout .profile \
     && git config --global --add safe.directory SRC_WORKSPACE \
     && echo .devcontainer/ >> .gitignore \
     && echo .devtmp/ >> .gitignore \
-    && git config --global core.excludesfile /home/SRC_USER/.gitignore
+    && git config --global core.excludesfile /home/SRC_USER/.gitignore \
+    && curl -fsSL https://get.docker.com | sh
 WORKDIR SRC_WORKDIR
