@@ -59,9 +59,13 @@ def project(args: Namespace) -> None:
                 )
             if cmd:
                 devcontainer["postCreateCommand"] = cmd
+            devcontainer["mounts"] = [
+                "source=/var/run/docker.sock,target=/var/run/docker.sock" \
+                f",type=bind,consistency=cached,readonly"
+            ]
             if args.mount:
                 mount = (x.split(":") for x in args.mount)
-                devcontainer["mounts"] = [
+                devcontainer["mounts"] += [
                     f"source=SRC_DIR/{src},target={tgt}" \
                     f",type=bind,consistency=cached"
                     for src, tgt in mount
