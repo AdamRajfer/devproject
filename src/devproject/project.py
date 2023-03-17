@@ -46,8 +46,9 @@ def project(args: Namespace) -> None:
                 if args.workdir:
                     cmd = f"{cmd}; sudo rmdir -p {args.workdir}"
                 cmd = (
-                    f"{cmd}; git clone {args.git} .devtmp; shopt -s dotglob;" \
-                    f" mv .devtmp/* .; rm .devlock; touch .devtmp/.devlock"
+                    f"{cmd}; git clone {args.git} .devtmp; pre-commit" \
+                    f" install; shopt -s dotglob; mv .devtmp/* .;" \
+                    f" rm .devlock; touch .devtmp/.devlock"
                 )
             if args.install_req:
                 cmd = (

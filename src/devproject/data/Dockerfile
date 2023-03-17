@@ -10,7 +10,7 @@ COPY .bashrc .bash_logout .profile ./
 USER SRC_USER
 RUN sudo chown SRC_USER:SRC_GID .bashrc .bash_logout .profile \
     && pip install --upgrade pip \
-    && pip install mypy isort black \
+    && pip install mypy isort black pre-commit \
     && git config --global user.name SRC_GIT_USER \
     && git config --global user.email SRC_GIT_EMAIL \
     && git config --global --add safe.directory SRC_WORKSPACE \
