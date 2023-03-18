@@ -1,0 +1,17 @@
+{
+    "audioCues.volume": 0,
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.accessibilitySupport": "on",
+    "editor.fontSize": 17,
+    "editor.fontWeight": "normal",
+    "editor.rulers": [79],
+    "explorer.excludeGitIgnore": true,
+    "files.autoSave": "afterDelay",
+    "files.watcherExclude": {"**/**/**/**/*": true},
+    "remote.SSH.remotePlatform": {},
+    "search.useGlobalIgnoreFiles": true,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "workbench.colorTheme": "Pycharm Original Theme",
+    "workbench.editor.untitled.hint": "hidden",
+    "[python]": {"editor.formatOnType": true}
+}
