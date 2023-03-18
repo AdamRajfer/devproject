@@ -51,9 +51,8 @@ def project(args: Namespace) -> None:
                     cmd = f"{cmd}; sudo rmdir -p {args.workdir}"
                 cmd = (
                     f"{cmd}; git clone {args.git} .devtmp; pre-commit" \
-                    f" install; git config --local core.excludesfile" \
-                    f" SRC_DIR/.devprojects/.gitignore; shopt -s dotglob;" \
-                    f" mv .devtmp/* .; rm .devlock; touch .devtmp/.devlock"
+                    f" install; shopt -s dotglob; mv .devtmp/* .;" \
+                    f" rm .devlock; touch .devtmp/.devlock"
                 )
             if args.install_req:
                 cmd = (
