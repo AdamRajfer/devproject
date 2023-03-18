@@ -52,7 +52,7 @@ def project(args: Namespace) -> None:
                 cmd = (
                     f"{cmd}; git clone {args.git} .devtmp; pre-commit" \
                     f" install; git config --local core.excludesfile" \
-                    f" SRC_DIR/.gitignore; shopt -s dotglob;" \
+                    f" SRC_DIR/.devprojects/.gitignore; shopt -s dotglob;" \
                     f" mv .devtmp/* .; rm .devlock; touch .devtmp/.devlock"
                 )
             if args.install_req:
