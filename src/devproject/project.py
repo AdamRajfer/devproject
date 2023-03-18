@@ -16,7 +16,7 @@ def project(args: Namespace) -> None:
     gitignore_dir = f"{get_local_dir()}/.gitignore"
     if not os.path.exists(gitignore_dir):
         with open(gitignore_dir, "w") as stream:
-            stream.write(".devcontainer/\n.devtmp\n")
+            stream.write(".devcontainer/\n.devtmp/\n")
     dev_dir = f"{get_local_dir()}/{args.name}/.devcontainer"
     if args.rm:
         shutil.rmtree(os.path.dirname(dev_dir))
