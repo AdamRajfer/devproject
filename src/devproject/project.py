@@ -17,7 +17,7 @@ def project(args: Namespace) -> None:
     if args.rm:
         shutil.rmtree(os.path.dirname(dev_dir))
         return
-    workspace_abs = f"/home/SRC_USER/{args.name}"
+    workspace_abs = f"SRC_DIR/.devprojects-workspace/{args.name}"
     workdir_abs = f"{workspace_abs}/{args.workdir or ''}".rstrip("/")
     os.makedirs(dev_dir)
     shutil.copy(f"{get_template_dir()}/settings.json", f"{dev_dir}/")
@@ -61,15 +61,10 @@ def project(args: Namespace) -> None:
                 devcontainer["postCreateCommand"] = cmd
             devcontainer["mounts"] = [
                 "source=/var/run/docker.sock,target=/var/run/docker.sock" \
-                f",type=bind,consistency=cached,readonly"
+                f",type=bind,consistency=cached,readonly",
+                "source=SRC_DIR,target=SRC_DIR,type=bind,consistency=cached",
+                *args.mount,
             ]
-            if args.mount:
-                mount = (x.split(":") for x in args.mount)
-                devcontainer["mounts"] += [
-                    f"source=SRC_DIR/{src},target={tgt}" \
-                    f",type=bind,consistency=cached"
-                    for src, tgt in mount
-                ]
             json.dump(devcontainer, f_out, indent=4)
     df = pd.Series(dict(**vars(args), datetime=datetime.now()))[COLUMNS]
     df.to_csv(f"{dev_dir}/../.devinfo.csv")

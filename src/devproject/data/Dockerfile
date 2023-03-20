@@ -1,11 +1,11 @@
 FROM SRC_IMAGE
 RUN groupadd -o --gid SRC_GID SRC_USER \
-    && useradd --uid SRC_UID --gid SRC_GID -m SRC_USER \
+    && useradd --uid SRC_UID --gid SRC_GID -d /home/SRC_USER-docker -m SRC_USER \
     && apt-get update \
     && apt-get install bash-completion sudo \
     && echo SRC_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/SRC_USER \
     && chmod 0440 /etc/sudoers.d/SRC_USER
-WORKDIR /home/SRC_USER
+WORKDIR /home/SRC_USER-docker
 COPY .bashrc .bash_logout .profile ./
 USER SRC_USER
 RUN sudo chown SRC_USER:SRC_GID .bashrc .bash_logout .profile \
@@ -16,8 +16,8 @@ RUN sudo chown SRC_USER:SRC_GID .bashrc .bash_logout .profile \
     && git config --global --add safe.directory SRC_WORKSPACE \
     && echo .devcontainer/ >> .gitignore \
     && echo .devtmp/ >> .gitignore \
-    && git config --global core.excludesfile /home/SRC_USER/.gitignore \
+    && git config --global core.excludesfile /home/SRC_USER-docker/.gitignore \
     && curl -fsSL https://get.docker.com | sh \
-    && (getent group docker || sudo groupadd docker) \
-    && sudo usermod -aG docker SRC_USER
+    && (getent group SRC_DOCKER || sudo groupadd --gid SRC_DOCKER docker || sudo groupmod --gid SRC_DOCKER docker) \
+    && sudo usermod -aG SRC_DOCKER SRC_USER
 WORKDIR SRC_WORKDIR

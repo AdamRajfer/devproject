@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # PYTHON_ARGCOMPLETE_OK
+import os
 import pathlib
 from argparse import (ArgumentDefaultsHelpFormatter, ArgumentParser,
                       HelpFormatter)
@@ -56,7 +57,7 @@ def dev() -> None:
             nargs="*",
             action="extend",
             type=str,
-            default=[":/resources"],
+            default=[],
             help="mount directory",
         )
         parser.add_argument(
@@ -80,6 +81,7 @@ def dev() -> None:
         parser.add_argument(
             "--deployment-path",
             type=pathlib.Path,
+            default=os.path.expanduser("~"),
             help="deployment path on the remote machine",
         )
         parser.add_argument("--gateway", type=str, help="gateway host name")

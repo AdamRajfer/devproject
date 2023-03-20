@@ -13,14 +13,16 @@ def run(args: Namespace) -> None:
         raise ValueError(f"Project {args.project} does not exist.")
     deployment = config["deployment_path"].rstrip("/")
     deployment_bash = deployment.replace("/", "\/")
-    directory = f"{deployment}/.devprojects/{args.project}"
+    directory = f"{deployment}/.devprojects-workspace/{args.project}"
     devcontainer = f"{directory}/.devcontainer"
     makedirs_cmd = f"mkdir -p {devcontainer}/"
     sync_cmd = f"rsync -a {local}/.devcontainer/"
     replace_cmd = (
         f"sed -i -e 's:SRC_DIR:{deployment_bash}:g'" \
         f" -e 's:SRC_USER:$(id -un):g' -e 's:SRC_UID:$(id -u):g'" \
-        f" -e 's:SRC_GID:$(id -g):g' {devcontainer}/*"
+        f" -e 's:SRC_GID:$(id -g):g' {devcontainer}/*" \
+        f" -e 's:SRC_DOCKER:$(stat -c %g /var/run/docker.sock):g'" \
+        f" {devcontainer}/*"
     )
     run_cmd = "code --folder-uri"
     if host:
