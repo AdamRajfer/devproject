@@ -7,8 +7,7 @@ from datetime import datetime
 import pandas as pd
 from tabulate import tabulate
 
-from devproject.utils import (COLUMNS, MAX_COL_WIDTHS, get_git_useremail,
-                              get_git_username, get_local_dir,
+from devproject.utils import (COLUMNS, MAX_COL_WIDTHS, get_local_dir,
                               get_template_dir)
 
 
@@ -38,7 +37,7 @@ def project(args: Namespace) -> None:
             if args.git:
                 cmd = f"cd {workspace_abs}"
                 if args.workdir:
-                    cmd = f"{cmd}; sudo rmdir -p {args.workdir}"
+                    cmd = f"{cmd}; rmdir -p {args.workdir}"
                 cmd = (
                     f"{cmd}; git clone {args.git} .devtmp; pre-commit" \
                     f" install; shopt -s dotglob; mv .devtmp/* .;" \
@@ -46,7 +45,7 @@ def project(args: Namespace) -> None:
                 )
             if args.install_req:
                 cmd = (
-                    f"{cmd or cmd + '; '}sudo pip install $(python -c 'import"
+                    f"{cmd or cmd + '; '}pip install $(python -c 'import"
                     f" subprocess; print(\"\".join([f\" -r {{x}}\" for x in"
                     f" subprocess.getoutput(\"find {workdir_abs} -maxdepth"
                     f" {args.req_depth} -name requirements.txt\").split()]))')"

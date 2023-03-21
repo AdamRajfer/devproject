@@ -20,18 +20,6 @@ COLUMNS = [
 MAX_COL_WIDTHS = [25, 25, 25, None, 25, 25, 25, 25]
 
 
-def get_git_username() -> str:
-    username = os.popen('git config user.name').read().strip()
-    assert username, "Run git config --global user.name <Your Name>."
-    return f"'{username}'"
-
-
-def get_git_useremail() -> str:
-    useremail = os.popen('git config user.email').read().strip()
-    assert useremail, "Run git config --global user.email <your@email.com>."
-    return f"'{useremail}'"
-
-
 def get_local_dir() -> str:
     return f"{os.path.expanduser('~')}/.devprojects"
 
