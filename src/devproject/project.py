@@ -21,17 +21,11 @@ def project(args: Namespace) -> None:
     workdir_abs = f"{workspace_abs}/{args.workdir or ''}".rstrip("/")
     os.makedirs(dev_dir)
     shutil.copy(f"{get_template_dir()}/settings.json", f"{dev_dir}/")
-    shutil.copy(f"{get_template_dir()}/.bashrc", f"{dev_dir}/")
-    shutil.copy(f"{get_template_dir()}/.bash_logout", f"{dev_dir}/")
-    shutil.copy(f"{get_template_dir()}/.profile", f"{dev_dir}/")
     with open(f"{get_template_dir()}/Dockerfile", "r") as f_src:
         with open(f"{dev_dir}/Dockerfile", "w") as f_out:
-            f_out.write(f_src.read(
-                ).replace("SRC_IMAGE", args.base_image
-                ).replace("SRC_WORKDIR", workdir_abs
-                ).replace("SRC_GIT_USER", get_git_username()
-                ).replace("SRC_GIT_EMAIL", get_git_useremail()
-                ).replace("SRC_WORKSPACE", workspace_abs))
+            f_out.write(f_src.read().replace(
+                "SRC_IMAGE", args.base_image
+            ).replace("SRC_WORKDIR", workdir_abs))
     with open(f"{get_template_dir()}/devcontainer.json", "r") as f_src:
         with open(f"{dev_dir}/devcontainer.json", "w") as f_out:
             devcontainer = json.load(f_src)
@@ -52,9 +46,9 @@ def project(args: Namespace) -> None:
                 )
             if args.install_req:
                 cmd = (
-                    f"{cmd or cmd + '; '}pip install $(python -c 'import" \
-                    f" subprocess; print(\"\".join([f\" -r {{x}}\" for x in" \
-                    f" subprocess.getoutput(\"find {workdir_abs} -maxdepth" \
+                    f"{cmd or cmd + '; '}sudo pip install $(python -c 'import"
+                    f" subprocess; print(\"\".join([f\" -r {{x}}\" for x in"
+                    f" subprocess.getoutput(\"find {workdir_abs} -maxdepth"
                     f" {args.req_depth} -name requirements.txt\").split()]))')"
                 )
             if cmd:
