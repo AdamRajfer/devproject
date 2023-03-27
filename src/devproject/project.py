@@ -41,7 +41,9 @@ def project(args: Namespace) -> None:
                 cmd = (
                     f"{cmd}; git clone {args.git} .devtmp; pre-commit" \
                     f" install; shopt -s dotglob; mv .devtmp/* .;" \
-                    f" rm .devlock; touch .devtmp/.devlock"
+                    f" rm .devlock; touch .devtmp/.devlock;" \
+                    f" echo .devcontainer/ >> ~/.gitignore;" \
+                    f" echo .devtmp/ >> ~/.gitignore"
                 )
             if args.install_req:
                 cmd = (
