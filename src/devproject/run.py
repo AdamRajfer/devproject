@@ -18,10 +18,10 @@ def run(args: Namespace) -> None:
     makedirs_cmd = f"mkdir -p {devcontainer}/"
     sync_cmd = f"rsync -a {local}/.devcontainer/"
     replace_cmd = (
-        f"sed -i -e 's:SRC_DIR:{deployment_bash}:g'" \
-        f" -e 's:SRC_USER:$(id -un):g' -e 's:SRC_UID:$(id -u):g'" \
-        f" -e 's:SRC_GID:$(id -g):g' {devcontainer}/*" \
-        f" -e 's:SRC_DOCKER:$(stat -c %g /var/run/docker.sock):g'" \
+        f"sed -i"
+        f" -e 's:SRC_DIR:{deployment_bash}:g'"
+        f" -e 's:SRC_USER:$(id -un):g'"
+        f" -e 's:SRC_DOCKER:$(stat -c %g /var/run/docker.sock):g'"
         f" {devcontainer}/*"
     )
     run_cmd = "code --folder-uri"

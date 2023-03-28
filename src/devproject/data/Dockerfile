@@ -1,6 +1,5 @@
 FROM SRC_IMAGE
-RUN groupadd -o --gid SRC_GID SRC_USER \
-    && useradd --uid SRC_UID --gid SRC_GID -d /home/SRC_USER-dev -m SRC_USER \
+RUN useradd -d /home/SRC_USER-dev -m SRC_USER \
     && apt-get update \
     && apt-get install bash-completion sudo \
     && echo SRC_USER ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/SRC_USER \
