@@ -16,18 +16,13 @@ def project(args: Namespace) -> None:
     if args.rm:
         shutil.rmtree(os.path.dirname(dev_dir))
         return
-    workspace_abs = f"SRC_DIR/.devprojects-workspace/{args.name}"
-    workdir_abs = f"{workspace_abs}/{args.workdir or ''}".rstrip("/")
     os.makedirs(dev_dir)
     shutil.copy(f"{get_template_dir()}/settings.json", f"{dev_dir}/")
-    with open(f"{get_template_dir()}/Dockerfile", "r") as f_src:
-        dockerfile = f_src.read().replace("SRC_IMAGE", args.base_image).replace("SRC_WORKDIR", workdir_abs)
-    with open(f"{dev_dir}/Dockerfile", "w") as f_out:
-        f_out.write(dockerfile)
+    shutil.copy(f"{get_template_dir()}/Dockerfile", f"{dev_dir}/")
     with open(f"{get_template_dir()}/devcontainer.json", "r") as f_src:
         devcontainer = json.load(f_src)
-        devcontainer["workspaceFolder"] = workdir_abs
-        devcontainer["workspaceMount"] = f"source=${{localWorkspaceFolder}},target={workspace_abs},type=bind,consistency=cached"
+        devcontainer["build"]["args"]["FROM_IMAGE"] = args.base_image
+        devcontainer["workspaceFolder"] = f"${{localWorkspaceFolder}}/{args.workdir or ''}".rstrip("/")
         devcontainer["mounts"] += args.mount
     with open(f"{dev_dir}/devcontainer.json", "w") as f_out:
         json.dump(devcontainer, f_out, indent=4)
