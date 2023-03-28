@@ -1,5 +1,13 @@
 {
     "audioCues.volume": 0,
+    "dev.containers.defaultExtensions": [
+        "ms-python.python",
+        "ms-python.isort",
+        "ms-python.black-formatter",
+        "ms-azuretools.vscode-docker",
+        "matangover.mypy",
+        "eamodio.gitlens"
+    ],
     "diffEditor.ignoreTrimWhitespace": false,
     "editor.accessibilitySupport": "on",
     "editor.fontSize": 17,

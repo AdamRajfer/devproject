@@ -7,17 +7,8 @@ import pandas as pd
 from tabulate import tabulate
 
 CONFIG_PATH = f"{os.path.expanduser('~')}/.devprojects/.config.json"
-COLUMNS = [
-    "name",
-    "base_image",
-    "workdir",
-    "install_req",
-    "req_depth",
-    "git",
-    "mount",
-    "datetime",
-]
-MAX_COL_WIDTHS = [25, 25, 25, None, 25, 25, 25, 25]
+COLUMNS = ["name", "base_image", "workdir", "mount", "datetime"]
+MAX_COL_WIDTHS = [25, 25, 25, 25, 25]
 
 
 def get_local_dir() -> str:

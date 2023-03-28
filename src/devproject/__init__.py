@@ -39,19 +39,7 @@ def dev() -> None:
             default="python:3",
             help="base docker image",
         )
-        parser.add_argument("--git", type=str, help="git repository to clone")
         parser.add_argument("--workdir", type=str, help="working directory")
-        parser.add_argument(
-            "--install-req",
-            action="store_true",
-            help="whether to install requirements.txt",
-        )
-        parser.add_argument(
-            "--req-depth",
-            type=int,
-            default=1,
-            help="maximum depth where requirements.txt are loacted",
-        )
         parser.add_argument(
             "--mount",
             nargs="*",
@@ -59,14 +47,6 @@ def dev() -> None:
             type=str,
             default=[],
             help="mount directory",
-        )
-        parser.add_argument(
-            "--slim", action="store_true", help="whether to install extensions"
-        )
-        parser.add_argument(
-            "--not-configure-git",
-            action="store_true",
-            help="whether to resign from configuring git",
         )
         parser.add_argument(
             "--rm", action="store_true", help="whether remove the project"

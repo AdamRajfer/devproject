@@ -3,16 +3,9 @@
     "remoteUser": "SRC_USER",
     "containerUser": "SRC_USER",
     "runArgs": ["--network", "host", "--gpus", "all", "--privileged"],
-    "customizations": {
-        "vscode": {
-            "extensions": [
-                "ms-python.python",
-                "ms-python.isort",
-                "ms-python.black-formatter",
-                "ms-azuretools.vscode-docker",
-                "matangover.mypy",
-                "eamodio.gitlens"
-            ]
-        }
-    }
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind,consistency=cached,readonly",
+        "source=SRC_DIR,target=SRC_DIR,type=bind,consistency=cached"
+    ],
+    "postCreateCommand": "echo .devcontainer/ >> ~/.gitignore"
 }
