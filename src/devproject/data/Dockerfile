@@ -1,7 +1,8 @@
 ARG FROM_IMAGE
 FROM ${FROM_IMAGE}
 ARG USER
-RUN useradd -d /home/${USER}-dev -m ${USER} \
+RUN groupadd -o --gid SRC_GID ${USER} \
+    && useradd --uid SRC_UID --gid SRC_GID -d /home/${USER}-dev -m ${USER} \
     && apt-get update \
     && apt-get install bash-completion sudo \
     && echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} \

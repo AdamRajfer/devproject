@@ -20,6 +20,8 @@ def run(args: Namespace) -> None:
     replace_cmd = (
         f"sed -i"
         f" -e 's:SRC_DIR:{deployment_bash}:g'"
+        f" -e 's:SRC_UID:$(id -u):g'"
+        f" -e 's:SRC_GID:$(id -g):g'"
         f" -e 's:SRC_DOCKER:$(stat -c %g /var/run/docker.sock):g'"
         f" {devcontainer}/*"
     )
