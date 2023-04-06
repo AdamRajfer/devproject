@@ -1,11 +1,8 @@
 #!/usr/bin/env python
-# PYTHON_ARGCOMPLETE_OK
 import os
 import pathlib
 from argparse import (ArgumentDefaultsHelpFormatter, ArgumentParser,
                       HelpFormatter)
-
-import argcomplete
 
 from devproject.config import config
 from devproject.configs import configs
@@ -28,7 +25,6 @@ def dev() -> None:
         "command",
         choices=["project", "projects", "config", "configs", "run", "open"],
     )
-    argcomplete.autocomplete(parser)
     args, rest = parser.parse_known_args()
     if args.command == "project":
         parser = ArgumentParser(formatter_class=_formater_class)
@@ -51,7 +47,6 @@ def dev() -> None:
         parser.add_argument(
             "--rm", action="store_true", help="whether remove the project"
         )
-        argcomplete.autocomplete(parser)
         project(parser.parse_args(rest))
     elif args.command == "projects":
         projects()
@@ -75,7 +70,6 @@ def dev() -> None:
             action="store_true",
             help="whether remove the deployment configuration",
         )
-        argcomplete.autocomplete(parser)
         config(parser.parse_args(rest))
     elif args.command == "configs":
         configs()
@@ -91,7 +85,6 @@ def dev() -> None:
             ),
             help="deployment configuration",
         )
-        argcomplete.autocomplete(parser)
         run(parser.parse_args(rest))
     else:
         parser = ArgumentParser(formatter_class=_formater_class)
@@ -107,7 +100,6 @@ def dev() -> None:
             ),
             help="deployment configuration",
         )
-        argcomplete.autocomplete(parser)
         dev_open(parser.parse_args(rest))
 
 
