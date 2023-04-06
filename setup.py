@@ -11,9 +11,7 @@ setup(
     python_requires=">=3.6",
     packages=find_packages("src"),
     package_dir={"": "src"},
-    package_data={
-        "": ["data/*", "data/.bashrc", "data/.bash_logout", "data/.profile"]
-    },
+    package_data={"": ["data/*"]},
     include_package_data=True,
     entry_points={
         "console_scripts": [

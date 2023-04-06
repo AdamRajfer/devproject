@@ -123,3 +123,48 @@ dev open /my/folder/on/remote
 ```bash
 dev open /my/folder/on/remote --config my-configuration
 ```
+
+## 6. Configure global settings
+
+### 6.1. Install extensions
+
+- ms-vscode-remote.remote-containers
+- ms-toolsai.jupyter-keymap
+- nicohlr.pycharm
+- ms-vscode-remote.remote-ssh
+- ms-vscode-remote.remote-ssh-edit
+- ms-vscode.remote-server
+- ms-vscode-remote.vscode-remote-extensionpack
+- ms-vscode.remote-explorer
+
+### 6.2. Configure settings
+
+Run `F1` + `Prefereneces: Open User Settings (JSON)` and paste the following content to the file:
+
+```json
+{
+    "audioCues.volume": 0,
+    "dev.containers.defaultExtensions": [
+        "ms-python.python",
+        "ms-python.isort",
+        "ms-python.black-formatter",
+        "ms-azuretools.vscode-docker",
+        "matangover.mypy",
+        "eamodio.gitlens"
+    ],
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.accessibilitySupport": "on",
+    "editor.fontSize": 17,
+    "editor.fontWeight": "normal",
+    "editor.rulers": [79],
+    "explorer.excludeGitIgnore": true,
+    "files.autoSave": "afterDelay",
+    "files.watcherExclude": {"**/**/**/**/*": true},
+    "remote.SSH.remotePlatform": {},
+    "search.useGlobalIgnoreFiles": true,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "workbench.colorTheme": "Pycharm Original Theme",
+    "workbench.editor.untitled.hint": "hidden",
+    "[python]": {"editor.formatOnType": true}
+}
+```
