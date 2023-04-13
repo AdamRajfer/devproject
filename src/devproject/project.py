@@ -17,7 +17,6 @@ def project(args: Namespace) -> None:
         shutil.rmtree(os.path.dirname(dev_dir))
         return
     os.makedirs(dev_dir)
-    shutil.copy(f"{get_template_dir()}/settings.json", f"{dev_dir}/")
     shutil.copy(f"{get_template_dir()}/Dockerfile", f"{dev_dir}/")
     with open(f"{get_template_dir()}/devcontainer.json", "r") as f_src:
         devcontainer = json.load(f_src)
