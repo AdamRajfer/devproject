@@ -54,79 +54,47 @@ dev config my-configuration-to-remove --rm
 dev config my-other-configuration
 ```
 
-## 3. Creating projects
+## 3. Running projects
 
-### 3.1. Default
-
-```bash
-dev project my-project
-```
-
-### 3.2. Specified base image
-
-```bash
-dev project my-project --base-image python:3.9
-```
-
-### 3.3. Specified workdir
-
-```bash
-dev project my-project --workdir relative/path/to/my/directory
-```
-
-### 3.4. Additional mounts
-
-```bash
-dev project my-project --mount source=/my/path/local,target=my/path/contaiener
-```
-
-### 3.5. Listing existing projects
-
-```bash
-dev projects
-```
-
-### 3.6. Removing existing project
-
-```bash
-dev project my-project-to-remove --rm
-```
-
-## 4. Running projects
-
-### 4.1. On current deployment configuration
+### 3.1. On current deployment configuration
 
 ```bash
 dev run my-project
 ```
 
-### 4.2. On specified deployment configuration
+### 3.2. On specified deployment configuration
 
 ```bash
 dev run my-project --config my-deployment-configuration
+```
+
+### 3.3. Using specified base image
+
+```bash
+dev run my-project --base-image python:3.9
 ```
 
 After openning the folder, run `F1` + `Dev Containers: Reopen in Container`.
 
 Note: if you are running via Slurm, you need to srun into at least one node on remote before running this command.
 
-## 5. Opening folder
+## 4. Opening folder
 
-### 5.1. Default
+### 4.1. Default
 
 ```bash
 dev open /my/folder/on/remote
 ```
 
-### 5.2. On specified deployment configuration
+### 4.2. On specified deployment configuration
 
 ```bash
 dev open /my/folder/on/remote --config my-configuration
 ```
 
-## 6. Configure global settings
+## 5. Configure global settings
 
-### 6.1. Install extensions
+### 5.1. Install extensions
 
 - ms-vscode-remote.remote-containers
 - ms-toolsai.jupyter-keymap
@@ -137,7 +105,7 @@ dev open /my/folder/on/remote --config my-configuration
 - ms-vscode-remote.vscode-remote-extensionpack
 - ms-vscode.remote-explorer
 
-### 6.2. Configure settings
+### 5.2. Configure settings
 
 Run `F1` + `Prefereneces: Open User Settings (JSON)` and paste the following content to the file:
 

@@ -6,13 +6,7 @@ from typing import Any, Dict, Optional
 import pandas as pd
 from tabulate import tabulate
 
-CONFIG_PATH = f"{os.path.expanduser('~')}/.devprojects/.config.json"
-COLUMNS = ["name", "base_image", "workdir", "mount", "datetime"]
-MAX_COL_WIDTHS = [25, 25, 25, 25, 25]
-
-
-def get_local_dir() -> str:
-    return f"{os.path.expanduser('~')}/.devprojects"
+CONFIG_PATH = f"{os.path.expanduser('~')}/.devconfig.json"
 
 
 def get_template_dir() -> str:
@@ -23,7 +17,7 @@ def get_host(config: Dict[str, Any]) -> Optional[str]:
     host = config["host"]
     if host == "sync":
         host  = subprocess.getoutput(
-            f"ssh {config['gateway']} 'HOST=$(squeue -u $USER --states R" \
+            f"ssh {config['gateway']} 'HOST=$(squeue -u $USER --states R"
             f" -O nodelist --noheader | head -n 1); echo $HOST'"
         ).split()[-1]
         assert host, f"SLURM job not created. Run srun on {config['gateway']}."
@@ -33,11 +27,18 @@ def get_host(config: Dict[str, Any]) -> Optional[str]:
 def get_config() -> Dict[str, Dict[str, str]]:
     if not os.path.exists(CONFIG_PATH):
         raise FileNotFoundError(
-            "No deployment configuration found." \
+            "No deployment configuration found."
             " Run `dev config` to create one."
         )
     with open(CONFIG_PATH, "r") as stream:
         return json.load(stream)
+
+
+def get_active_config() -> str:
+    return next(
+        x["name"] for x in get_config().values()
+        if x["active"] == "True"
+    )
 
 
 def save_config(config: Dict[str, Dict[str, str]]) -> None:

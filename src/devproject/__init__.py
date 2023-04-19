@@ -7,10 +7,8 @@ from argparse import (ArgumentDefaultsHelpFormatter, ArgumentParser,
 from devproject.config import config
 from devproject.configs import configs
 from devproject.dev_open import dev_open
-from devproject.project import project
-from devproject.projects import projects
 from devproject.run import run
-from devproject.utils import get_config
+from devproject.utils import get_active_config
 
 
 def _formater_class(prog: str) -> HelpFormatter:
@@ -21,36 +19,9 @@ def _formater_class(prog: str) -> HelpFormatter:
 
 def dev() -> None:
     parser = ArgumentParser(formatter_class=_formater_class, add_help=False)
-    parser.add_argument(
-        "command",
-        choices=["project", "projects", "config", "configs", "run", "open"],
-    )
+    parser.add_argument("cmd", choices=["config", "configs", "run", "open"])
     args, rest = parser.parse_known_args()
-    if args.command == "project":
-        parser = ArgumentParser(formatter_class=_formater_class)
-        parser.add_argument("name", type=str, help="project name")
-        parser.add_argument(
-            "--base-image",
-            type=str,
-            default="python:3",
-            help="base docker image",
-        )
-        parser.add_argument("--workdir", type=str, help="working directory")
-        parser.add_argument(
-            "--mount",
-            nargs="*",
-            action="extend",
-            type=str,
-            default=[],
-            help="mount directory",
-        )
-        parser.add_argument(
-            "--rm", action="store_true", help="whether remove the project"
-        )
-        project(parser.parse_args(rest))
-    elif args.command == "projects":
-        projects()
-    elif args.command == "config":
+    if args.cmd == "config":
         parser = ArgumentParser(formatter_class=_formater_class)
         parser.add_argument("name", type=str, help="configuration name")
         parser.add_argument(
@@ -71,18 +42,18 @@ def dev() -> None:
             help="whether remove the deployment configuration",
         )
         config(parser.parse_args(rest))
-    elif args.command == "configs":
+    elif args.cmd == "configs":
         configs()
-    elif args.command == "run":
+    elif args.cmd == "run":
         parser = ArgumentParser(formatter_class=_formater_class)
         parser.add_argument("project", type=str, help="project name")
         parser.add_argument(
+            "--base-image", default="python:3", type=str, help="base image"
+        )
+        parser.add_argument(
             "--config",
             type=str,
-            default=next(
-                x["name"] for x in get_config().values()
-                if x["active"] == "True"
-            ),
+            default=get_active_config(),
             help="deployment configuration",
         )
         run(parser.parse_args(rest))
@@ -94,10 +65,7 @@ def dev() -> None:
         parser.add_argument(
             "--config",
             type=str,
-            default=next(
-                x["name"] for x in get_config().values()
-                if x["active"] == "True"
-            ),
+            default=get_active_config(),
             help="deployment configuration",
         )
         dev_open(parser.parse_args(rest))

@@ -12,4 +12,4 @@ def dev_open(args: Namespace) -> None:
         cmd = f"{cmd} vscode-remote://ssh-remote+{host}{args.directory}"
     else:
         cmd = f"{cmd} {args.directory}"
-    assert not subprocess.call(cmd, shell=True), "Bash command failed."
+    subprocess.check_call(cmd, shell=True)

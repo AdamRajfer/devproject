@@ -1,18 +1,12 @@
 {
-    "build": {
-        "dockerfile": "Dockerfile",
-        "args": {
-            "USER": "${localEnv:USER}"
-        }
-    },
-    "remoteUser": "${localEnv:USER}",
-    "containerUser": "${localEnv:USER}",
+    "image": "SRC_IMAGE-dev",
     "runArgs": ["--network", "host", "--gpus", "all"],
     "mounts": [
         "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind,consistency=cached,readonly",
         "source=${localWorkspaceFolder},target=${localWorkspaceFolder},type=bind,consistency=cached",
         "source=SRC_DIR,target=SRC_DIR,type=bind,consistency=cached"
     ],
-    "postCreateCommand": "echo .devcontainer/ >> ~/.gitignore",
+    "workspaceFolder": "${localWorkspaceFolder}",
+    "postCreateCommand": "echo .devcontainer.json >> ~/.gitignore",
     "privileged": true
 }
