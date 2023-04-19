@@ -1,5 +1,5 @@
 {
-    "image": "SRC_IMAGE-dev",
+    "image": "SRC_IMAGE-devcontainer",
     "runArgs": ["--network", "host", "--gpus", "all"],
     "mounts": [
         "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind,consistency=cached,readonly",

@@ -7,7 +7,6 @@ setup(
         "Tools for running projects in Visual Studio Code in devcontainers"
     ),
     author="Adam Rajfer",
-    install_requires=["pandas", "tabulate"],
     python_requires=">=3.6",
     packages=find_packages("src"),
     package_dir={"": "src"},

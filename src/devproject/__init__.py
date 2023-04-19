@@ -4,9 +4,8 @@ import pathlib
 from argparse import (ArgumentDefaultsHelpFormatter, ArgumentParser,
                       HelpFormatter)
 
-from devproject.config import config, configs
+from devproject.config import config, configs, get_active_config
 from devproject.run import explore, run
-from devproject.utils import get_active_config
 
 
 def _formater_class(prog: str) -> HelpFormatter:
