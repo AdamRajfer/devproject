@@ -7,6 +7,5 @@
         "source=SRC_DIR,target=SRC_DIR,type=bind,consistency=cached"
     ],
     "workspaceFolder": "${localWorkspaceFolder}",
-    "postCreateCommand": "echo .devcontainer.json >> ~/.gitignore",
     "privileged": true
 }

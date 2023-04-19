@@ -12,4 +12,5 @@ RUN pip install --upgrade pip \
     && pip install mypy isort black pre-commit \
     && curl -fsSL https://get.docker.com | sh \
     && (getent group SRC_DOCKER || sudo groupadd --gid SRC_DOCKER docker || sudo groupmod --gid SRC_DOCKER docker) \
-    && sudo usermod -aG SRC_DOCKER ${USER}
+    && sudo usermod -aG SRC_DOCKER ${USER} \
+    && echo .devcontainer.json >> ~/.gitignore
