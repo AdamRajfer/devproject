@@ -1,4 +1,3 @@
-import os
 import subprocess
 from argparse import Namespace
 
@@ -41,6 +40,19 @@ def run(args: Namespace) -> None:
         replace_cmd = f"eval '{replace_cmd}'"
         build_cmd = f"eval '{build_cmd}'"
         run_cmd = f"{run_cmd} {directory}"
-    cmd = " \\\n&& ".join([makedirs_cmd, sync_cmd, replace_cmd, build_cmd, run_cmd])
+    cmd = " \\\n&& ".join(
+        [makedirs_cmd, sync_cmd, replace_cmd, build_cmd, run_cmd]
+    )
     print(cmd)
+    subprocess.check_call(cmd, shell=True)
+
+
+def explore(args: Namespace) -> None:
+    config = get_config()[args.config]
+    host = get_host(config)
+    cmd = "code --folder-uri"
+    if host:
+        cmd = f"{cmd} vscode-remote://ssh-remote+{host}{args.directory}"
+    else:
+        cmd = f"{cmd} {args.directory}"
     subprocess.check_call(cmd, shell=True)

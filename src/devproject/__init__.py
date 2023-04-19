@@ -4,10 +4,8 @@ import pathlib
 from argparse import (ArgumentDefaultsHelpFormatter, ArgumentParser,
                       HelpFormatter)
 
-from devproject.config import config
-from devproject.configs import configs
-from devproject.dev_open import dev_open
-from devproject.run import run
+from devproject.config import config, configs
+from devproject.run import explore, run
 from devproject.utils import get_active_config
 
 
@@ -68,7 +66,7 @@ def dev() -> None:
             default=get_active_config(),
             help="deployment configuration",
         )
-        dev_open(parser.parse_args(rest))
+        explore(parser.parse_args(rest))
 
 
 if __name__ == "__main__":

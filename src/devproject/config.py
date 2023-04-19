@@ -25,3 +25,11 @@ def config(args: Namespace) -> None:
         for k in config:
             config[k]["active"] = "True" if k == args.name else "False"
     save_config(config)
+
+
+def configs() -> None:
+    try:
+        config = get_config()
+    except FileNotFoundError:
+        config = {}
+    save_config(config)
