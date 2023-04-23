@@ -66,9 +66,9 @@ def run(args: Namespace) -> None:
 def explore(args: Namespace) -> None:
     config = get_config()[args.config]
     host = _get_host(config)
-    cmd = "code --folder-uri"
-    if host:
-        cmd = f"{cmd} vscode-remote://ssh-remote+{host}{args.directory}"
-    else:
-        cmd = f"{cmd} {args.directory}"
-    subprocess.check_call(cmd, shell=True)
+    runcmd = (
+        f"code --folder-uri"
+        f" {f'vscode-remote://ssh-remote+{host}' if host else ''}"
+        f"{args.directory}"
+    )
+    subprocess.check_call(runcmd, shell=True)
