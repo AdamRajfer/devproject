@@ -19,7 +19,7 @@ def _get_host(config: Dict[str, Any]) -> Optional[str]:
     if host == "sync":
         host  = subprocess.getoutput(
             f"ssh {config['gateway']} 'HOST=$(squeue -u $USER --states R"
-            f" -O nodelist --noheader | head -n 1); echo $HOST'"
+            f" --format '%.100N' --noheader | head -n 1); echo $HOST'"
         ).split()[-1]
         assert host, f"SLURM job not created. Run srun on {config['gateway']}."
     return host
