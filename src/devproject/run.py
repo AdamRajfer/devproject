@@ -1,6 +1,10 @@
+import json
 import os
+import shutil
 import subprocess
+import tempfile
 from argparse import Namespace
+from pathlib import Path
 from typing import Any, Dict, Optional
 
 from devproject.config import get_config
@@ -24,46 +28,39 @@ def _get_host(config: Dict[str, Any]) -> Optional[str]:
 def run(args: Namespace) -> None:
     config = get_config()[args.config]
     host = _get_host(config)
-    deployment = config["deployment_path"].rstrip("/")
-    directory = f"{deployment}/.devprojects/{args.project}"
-    devcontainer = f"{directory}/.devcontainer"
-    makedirs_cmd = f"mkdir -p {devcontainer}/"
-    sync_cmd = f"rsync -a {_get_template_dir()}/"
-    replace_cmd = (
-        f"sed -i"
-        f" -e 's#SRC_DIR#{deployment}#g'"
-        f" -e 's#SRC_IMAGE#{args.base_image}#g'"
-        f" {devcontainer}/*"
-    )
-    build_cmd = (
-        f"docker build -t {args.base_image}-devcontainer"
-        f" --build-arg FROM_IMAGE={args.base_image}"
-        f" --build-arg USER=$(id -un)"
-        f" --build-arg USER_UID=$(id -u)"
-        f" --build-arg USER_GID=$(id -g)"
-        f" --build-arg DOCKER_GID=$(stat -c %g /var/run/docker.sock)"
-        f" {devcontainer}/"
-        f" && mv {devcontainer}/devcontainer.json"
-        f" {devcontainer}/../.devcontainer.json"
-        f" && rm -r {devcontainer}"
-    )
-    run_cmd = "code --folder-uri"
-    if host:
-        makedirs_cmd = f"ssh {host} {makedirs_cmd}"
-        sync_cmd = f"{sync_cmd} {host}:{devcontainer}/ --delete"
-        replace_cmd = f"ssh {host} {replace_cmd}"
-        build_cmd = f"ssh {host} '{build_cmd}'"
-        run_cmd = f"{run_cmd} vscode-remote://ssh-remote+{host}{directory}"
-    else:
-        sync_cmd = f"{sync_cmd} {devcontainer}/ --delete"
-        replace_cmd = f"eval '{replace_cmd}'"
-        build_cmd = f"eval '{build_cmd}'"
-        run_cmd = f"{run_cmd} {directory}"
-    cmd = " \\\n&& ".join(
-        [makedirs_cmd, sync_cmd, replace_cmd, build_cmd, run_cmd]
-    )
-    print(cmd)
-    subprocess.check_call(cmd, shell=True)
+    srcdir = Path(config["deployment_path"])
+    prodir = srcdir / ".devprojects" / args.project
+    devdir = prodir / ".devcontainer"
+    with tempfile.TemporaryDirectory() as tmpdir:
+        tmpdir = Path(tmpdir)
+        shutil.copytree(_get_template_dir(), tmpdir, dirs_exist_ok=True)
+        with open(tmpdir / "devcontainer.json", "r") as stream:
+            devcontainer = json.load(stream)
+        devcontainer["image"] = f"{args.base_image}-devcontainer"
+        devcontainer["mounts"].append(
+            f"source={srcdir},target={srcdir},type=bind,consistency=cached"
+        )
+        devcontainer["initializeCommand"] = (
+            f"docker build"
+            f" -t {args.base_image}-devcontainer"
+            f" --build-arg FROM_IMAGE={args.base_image}"
+            f" --build-arg USER=$(id -un)"
+            f" --build-arg USER_UID=$(id -u)"
+            f" --build-arg USER_GID=$(id -g)"
+            f" --build-arg DOCKER_GID=$(stat -c %g /var/run/docker.sock)"
+            f" {devdir}"
+        )
+        with open(tmpdir / "devcontainer.json", "w") as stream:
+            json.dump(devcontainer, stream, indent=4)
+        mkdcmd = f"{f'ssh {host} ' if host else ''}mkdir -p {devdir}"
+        syncmd = f"rsync -a {tmpdir}/ {f'{host}:' if host else ''}{devdir}/"
+        runcmd = (
+            f"code --folder-uri"
+            f" {f'vscode-remote://ssh-remote+{host}' if host else ''}{prodir}"
+        )
+        subprocess.check_call(mkdcmd, shell=True)
+        subprocess.check_call(syncmd, shell=True)
+        subprocess.check_call(runcmd, shell=True)
 
 
 def explore(args: Namespace) -> None:
