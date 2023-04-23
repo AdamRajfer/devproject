@@ -14,23 +14,28 @@ def _get_template_dir() -> str:
     return f"{os.path.dirname(os.path.abspath(__file__))}/data"
 
 
-def _get_host(config: Dict[str, Any], verbose: bool = False) -> Optional[str]:
+def _get_host(
+    config: Dict[str, Any], verbose: bool = False, dry_run: bool = False
+) -> Optional[str]:
     host = config["host"]
     if host == "sync":
         sruncmd = (
             f"ssh {config['gateway']} 'HOST=$(squeue -u $USER --states R"
             f" --format '%.100N' --noheader | head -n 1); echo $HOST'"
         )
-        if verbose:
+        if verbose or dry_run:
             print(sruncmd)
-        host  = subprocess.getoutput(sruncmd).split()[-1]
-        assert host, f"SLURM job not created. Run srun on {config['gateway']}."
+        if dry_run:
+            host = "sync"
+        else:
+            host  = subprocess.getoutput(sruncmd).split()[-1]
+            assert host, f"SLURM job not created. Run srun on {config['gateway']}."
     return host
 
 
 def run(args: Namespace) -> None:
     config = get_config()[args.config]
-    host = _get_host(config, verbose=args.verbose)
+    host = _get_host(config, verbose=args.verbose, dry_run=args.dry_run)
     srcdir = Path(config["deployment_path"])
     prodir = srcdir / args.directory
     devdir = prodir / ".devcontainer"
@@ -61,22 +66,26 @@ def run(args: Namespace) -> None:
             f"code --folder-uri"
             f" {f'vscode-remote://ssh-remote+{host}' if host else ''}{prodir}"
         )
-        if args.verbose:
+        if args.verbose or args.dry_run:
             print(syncmd)
-        subprocess.check_call(syncmd, shell=True)
-        if args.verbose:
+        if not args.dry_run:
+            subprocess.check_call(syncmd, shell=True)
+        if args.verbose or args.dry_run:
             print(runcmd)
-        subprocess.check_call(runcmd, shell=True)
+        if not args.dry_run:
+            subprocess.check_call(runcmd, shell=True)
 
 
 def explore(args: Namespace) -> None:
     config = get_config()[args.config]
-    host = _get_host(config, verbose=args.verbose)
+    host = _get_host(config, verbose=args.verbose, dry_run=args.dry_run)
+    srcdir = Path(config["deployment_path"])
     runcmd = (
         f"code --folder-uri"
         f" {f'vscode-remote://ssh-remote+{host}' if host else ''}"
-        f"{args.directory}"
+        f"{srcdir / args.directory}"
     )
-    if args.verbose:
+    if args.verbose or args.dry_run:
         print(runcmd)
-    subprocess.check_call(runcmd, shell=True)
+    if not args.dry_run:
+        subprocess.check_call(runcmd, shell=True)

@@ -44,6 +44,11 @@ def dev() -> None:
             action="store_true",
             help="whether to print the intermediate commands",
         )
+        parser.add_argument(
+            "--dry-run",
+            action="store_true",
+            help="whether to print the intermediate commands and exit",
+        )
         config(parser.parse_args(rest))
     elif args.cmd == "configs":
         configs()
@@ -73,6 +78,11 @@ def dev() -> None:
             action="store_true",
             help="whether to print the intermediate commands",
         )
+        parser.add_argument(
+            "--dry-run",
+            action="store_true",
+            help="whether to print the intermediate commands and exit",
+        )
         run(parser.parse_args(rest))
     else:
         parser = ArgumentParser(formatter_class=_formater_class)
@@ -90,6 +100,11 @@ def dev() -> None:
             "--verbose",
             action="store_true",
             help="whether to print the intermediate commands",
+        )
+        parser.add_argument(
+            "--dry-run",
+            action="store_true",
+            help="whether to print the intermediate commands and exit",
         )
         explore(parser.parse_args(rest))
 
