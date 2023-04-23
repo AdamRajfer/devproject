@@ -14,22 +14,25 @@ def _get_template_dir() -> str:
     return f"{os.path.dirname(os.path.abspath(__file__))}/data"
 
 
-def _get_host(config: Dict[str, Any]) -> Optional[str]:
+def _get_host(config: Dict[str, Any], verbose: bool = False) -> Optional[str]:
     host = config["host"]
     if host == "sync":
-        host  = subprocess.getoutput(
+        sruncmd = (
             f"ssh {config['gateway']} 'HOST=$(squeue -u $USER --states R"
             f" --format '%.100N' --noheader | head -n 1); echo $HOST'"
-        ).split()[-1]
+        )
+        if verbose:
+            print(sruncmd)
+        host  = subprocess.getoutput(sruncmd).split()[-1]
         assert host, f"SLURM job not created. Run srun on {config['gateway']}."
     return host
 
 
 def run(args: Namespace) -> None:
     config = get_config()[args.config]
-    host = _get_host(config)
+    host = _get_host(config, verbose=args.verbose)
     srcdir = Path(config["deployment_path"])
-    prodir = srcdir / ".devprojects" / args.project
+    prodir = srcdir / args.directory
     devdir = prodir / ".devcontainer"
     with tempfile.TemporaryDirectory() as tmpdir:
         tmpdir = Path(tmpdir)
@@ -37,9 +40,10 @@ def run(args: Namespace) -> None:
         with open(tmpdir / "devcontainer.json", "r") as stream:
             devcontainer = json.load(stream)
         devcontainer["image"] = f"{args.base_image}-devcontainer"
-        devcontainer["mounts"].append(
-            f"source={srcdir},target={srcdir},type=bind,consistency=cached"
-        )
+        devcontainer["mounts"] += [
+            f"source={srcdir},target={srcdir},type=bind,consistency=cached",
+            *args.mount,
+        ]
         devcontainer["initializeCommand"] = (
             f"docker build"
             f" -t {args.base_image}-devcontainer"
@@ -52,23 +56,27 @@ def run(args: Namespace) -> None:
         )
         with open(tmpdir / "devcontainer.json", "w") as stream:
             json.dump(devcontainer, stream, indent=4)
-        mkdcmd = f"{f'ssh {host} ' if host else ''}mkdir -p {devdir}"
         syncmd = f"rsync -a {tmpdir}/ {f'{host}:' if host else ''}{devdir}/"
         runcmd = (
             f"code --folder-uri"
             f" {f'vscode-remote://ssh-remote+{host}' if host else ''}{prodir}"
         )
-        subprocess.check_call(mkdcmd, shell=True)
+        if args.verbose:
+            print(syncmd)
         subprocess.check_call(syncmd, shell=True)
+        if args.verbose:
+            print(runcmd)
         subprocess.check_call(runcmd, shell=True)
 
 
 def explore(args: Namespace) -> None:
     config = get_config()[args.config]
-    host = _get_host(config)
+    host = _get_host(config, verbose=args.verbose)
     runcmd = (
         f"code --folder-uri"
         f" {f'vscode-remote://ssh-remote+{host}' if host else ''}"
         f"{args.directory}"
     )
+    if args.verbose:
+        print(runcmd)
     subprocess.check_call(runcmd, shell=True)

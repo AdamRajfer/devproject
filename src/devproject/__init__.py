@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 import os
-import pathlib
 from argparse import (ArgumentDefaultsHelpFormatter, ArgumentParser,
                       HelpFormatter)
+from pathlib import Path
 
 from devproject.config import config, configs, get_active_config
 from devproject.run import explore, run
@@ -23,7 +23,7 @@ def dev() -> None:
         parser.add_argument("name", type=str, help="configuration name")
         parser.add_argument(
             "--deployment-path",
-            type=pathlib.Path,
+            type=Path,
             default=os.path.expanduser("~"),
             help="deployment path on the remote machine",
         )
@@ -38,32 +38,58 @@ def dev() -> None:
             action="store_true",
             help="whether remove the deployment configuration",
         )
+        parser.add_argument(
+            "-v",
+            "--verbose",
+            action="store_true",
+            help="whether to print the intermediate commands",
+        )
         config(parser.parse_args(rest))
     elif args.cmd == "configs":
         configs()
     elif args.cmd == "run":
         parser = ArgumentParser(formatter_class=_formater_class)
-        parser.add_argument("project", type=str, help="project name")
+        parser.add_argument("directory", type=Path, help="project name")
         parser.add_argument(
             "--base-image", default="python:3", type=str, help="base image"
+        )
+        parser.add_argument(
+            "--mount",
+            nargs="*",
+            action="extend",
+            type=str,
+            default=[],
+            help="additional mounts",
         )
         parser.add_argument(
             "--config",
             type=str,
             default=get_active_config(),
             help="deployment configuration",
+        )
+        parser.add_argument(
+            "-v",
+            "--verbose",
+            action="store_true",
+            help="whether to print the intermediate commands",
         )
         run(parser.parse_args(rest))
     else:
         parser = ArgumentParser(formatter_class=_formater_class)
         parser.add_argument(
-            "directory", type=pathlib.Path, help="project directory on remote"
+            "directory", type=Path, help="project directory on remote"
         )
         parser.add_argument(
             "--config",
             type=str,
             default=get_active_config(),
             help="deployment configuration",
+        )
+        parser.add_argument(
+            "-v",
+            "--verbose",
+            action="store_true",
+            help="whether to print the intermediate commands",
         )
         explore(parser.parse_args(rest))
 
