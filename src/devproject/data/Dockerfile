@@ -11,8 +11,7 @@ RUN groupadd -o --gid ${USER_GID} ${USER} \
     && echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} \
     && chmod 0440 /etc/sudoers.d/${USER}
 USER ${USER}
-RUN pip install --upgrade pip \
-    && pip install mypy isort black pre-commit \
+RUN pip install pre-commit \
     && curl -fsSL https://get.docker.com | sh \
     && (getent group ${DOCKER_GID} || sudo groupadd --gid ${DOCKER_GID} docker || sudo groupmod --gid ${DOCKER_GID} docker) \
     && sudo usermod -aG ${DOCKER_GID} ${USER} \

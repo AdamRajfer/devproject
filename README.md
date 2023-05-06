@@ -13,25 +13,25 @@ pip install git+https://github.com/AdamRajfer/devproject
 ### 2.1. Local
 
 ```bash
-dev config my-local-configuration
+dev config conf-name
 ```
 
 ### 2.2. Remote
 
 ```bash
-dev config my-remote-configuration --gateway my-host
+dev config conf-name --gateway host-name
 ```
 
 ### 2.3. Remote via Slurm
 
 ```bash
-dev config my-remote-slurm-configuration --gateway my-host --sync-host
+dev config conf-name --gateway host-name --sync-host
 ```
 
 ### 2.4. Specified deployment path
 
 ```bash
-dev config my-configuration --deployment-path /path/to/my/deployment
+dev config conf-name --deployment-path /deployment/path
 ```
 
 ### 2.5. Listing configurations
@@ -45,13 +45,13 @@ The currently active configuration will be highlighted in green.
 ### 2.6. Removing existing cofiguration
 
 ```bash
-dev config my-configuration-to-remove --rm
+dev config conf-name --rm
 ```
 
 ### 2.7. Changing the active configuration
 
 ```bash
-dev config my-other-configuration
+dev config conf-name
 ```
 
 ## 3. Running projects
@@ -59,19 +59,19 @@ dev config my-other-configuration
 ### 3.1. On current deployment configuration
 
 ```bash
-dev run my-project
+dev run project-name
 ```
 
 ### 3.2. On specified deployment configuration
 
 ```bash
-dev run my-project --config my-deployment-configuration
+dev run project-name --config conf-name
 ```
 
 ### 3.3. Using specified base image
 
 ```bash
-dev run my-project --base-image python:3.9
+dev run project-name --base-image python:3.9
 ```
 
 After openning the folder, run `F1` + `Dev Containers: Reopen in Container`.
@@ -83,13 +83,13 @@ Note: if you are running via Slurm, you need to srun into at least one node on r
 ### 4.1. Default
 
 ```bash
-dev open /my/folder/on/remote
+dev open /project/path
 ```
 
 ### 4.2. On specified deployment configuration
 
 ```bash
-dev open /my/folder/on/remote --config my-configuration
+dev open /project/path --config conf-name
 ```
 
 ## 5. Configure global settings

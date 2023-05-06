@@ -50,7 +50,8 @@ def run(args: Namespace) -> None:
             *args.mount,
         ]
         devcontainer["initializeCommand"] = (
-            f"docker build"
+            f"docker inspect {args.base_image}-devcontainer 1>/dev/null"
+            f" || docker build"
             f" -t {args.base_image}-devcontainer"
             f" --build-arg FROM_IMAGE={args.base_image}"
             f" --build-arg USER=$(id -un)"
