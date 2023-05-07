@@ -113,12 +113,13 @@ Run `F1` + `Prefereneces: Open User Settings (JSON)` and paste the following con
 {
     "audioCues.volume": 0,
     "dev.containers.defaultExtensions": [
-        "ms-python.python",
-        "ms-python.isort",
-        "ms-python.black-formatter",
+        "eamodio.gitlens",
         "ms-azuretools.vscode-docker",
-        "matangover.mypy",
-        "eamodio.gitlens"
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.mypy-type-checker",
+        "ms-python.python",
+        "ms-toolsai.jupyter"
     ],
     "diffEditor.ignoreTrimWhitespace": false,
     "editor.accessibilitySupport": "on",
