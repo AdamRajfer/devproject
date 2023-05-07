@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 import os
-from argparse import (ArgumentDefaultsHelpFormatter, ArgumentParser,
-                      HelpFormatter)
+from argparse import (
+    ArgumentDefaultsHelpFormatter,
+    ArgumentParser,
+    HelpFormatter
+)
 from pathlib import Path
 
 from devproject.config import config, configs, get_active_config
