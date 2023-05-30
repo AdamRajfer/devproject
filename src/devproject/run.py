@@ -46,8 +46,8 @@ def run(args: Namespace) -> None:
             devcontainer = json.load(stream)
         devcontainer["image"] = f"{args.base_image}-devcontainer"
         devcontainer["mounts"] += [
-            f"source={srcdir},target={srcdir},type=bind,consistency=cached",
-            *args.mount,
+            f"source={x},target={x},type=bind,consistency=cached"
+            for x in [srcdir] + args.mount
         ]
         devcontainer["initializeCommand"] = (
             f"docker inspect {args.base_image}-devcontainer 1>/dev/null"

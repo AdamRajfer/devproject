@@ -9,7 +9,8 @@ RUN groupadd -o --gid ${USER_GID} ${USER} \
     && apt-get update \
     && apt-get install bash-completion sudo \
     && echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} \
-    && chmod 0440 /etc/sudoers.d/${USER}
+    && chmod 0440 /etc/sudoers.d/${USER} \
+    && pip install --upgrade pip
 USER ${USER}
 RUN pip install pre-commit \
     && curl -fsSL https://get.docker.com | sh \
