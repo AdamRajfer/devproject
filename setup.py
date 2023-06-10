@@ -5,7 +5,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="devproject",
-    version=subprocess.check_output("git rev-parse HEAD", shell=True, cwd=os.path.dirname(__file__)).decode("utf-8").strip(),
+    version="0.0.1",
     description=(
         "Tools for running projects in Visual Studio Code in devcontainers"
     ),
