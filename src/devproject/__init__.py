@@ -76,6 +76,12 @@ def dev() -> None:
             help="deployment configuration",
         )
         parser.add_argument(
+            "--ssh",
+            type=str,
+            default="ssh",
+            help="ssh executable",
+        )
+        parser.add_argument(
             "-v",
             "--verbose",
             action="store_true",
