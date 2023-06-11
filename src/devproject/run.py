@@ -62,7 +62,7 @@ def run(args: Namespace) -> None:
         )
         with open(tmpdir / "devcontainer.json", "w") as stream:
             json.dump(devcontainer, stream, indent=4)
-        syncmd = f"rsync -a {tmpdir}/ {f'{host}:' if host else ''}{devdir}/"
+        syncmd = f"rsync -e {args.ssh} -a {tmpdir}/ {f'{host}:' if host else ''}{devdir}/"
         runcmd = (
             f"code --folder-uri"
             f" {f'vscode-remote://ssh-remote+{host}' if host else ''}{prodir}"
