@@ -15,5 +15,4 @@ USER ${USER}
 RUN pip install pre-commit \
     && curl -fsSL https://get.docker.com | sh \
     && (getent group ${DOCKER_GID} || sudo groupadd --gid ${DOCKER_GID} docker || sudo groupmod --gid ${DOCKER_GID} docker) \
-    && sudo usermod -aG ${DOCKER_GID} ${USER} \
-    && echo .devcontainer/ >> ~/.gitignore
+    && sudo usermod -aG ${DOCKER_GID} ${USER}

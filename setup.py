@@ -1,23 +1,13 @@
-import os
-import subprocess
-
 from setuptools import find_packages, setup
 
 setup(
     name="devproject",
-    version="0.0.1",
+    version="0.0.2",
     description=(
         "Tools for running projects in Visual Studio Code in devcontainers"
     ),
     author="Adam Rajfer",
     python_requires=">=3.6",
-    packages=find_packages("src"),
-    package_dir={"": "src"},
-    package_data={"": ["data/*"]},
-    include_package_data=True,
-    entry_points={
-        "console_scripts": [
-            "dev = devproject:dev",
-        ]
-    }
+    packages=find_packages(),
+    entry_points={"console_scripts": ["dev = devproject:dev"]},
 )
