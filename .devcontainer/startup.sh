@@ -11,7 +11,7 @@ echo "USER: ${USER}"
 echo "USER_UID: ${USER_UID}"
 echo "USER_GID: ${USER_GID}"
 echo "DOCKER_GID: ${DOCKER_GID}"
-docker inspect ${IMAGE} &>/dev/null || docker build \
+docker build \
     -t ${IMAGE} \
     --build-arg FROM_IMAGE=${FROM_IMAGE} \
     --build-arg USER=${USER} \
