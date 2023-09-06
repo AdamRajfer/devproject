@@ -5,7 +5,7 @@ ARG USER_UID
 ARG USER_GID
 ARG DOCKER_GID
 RUN groupadd -o --gid ${USER_GID} ${USER} \
-    && useradd --uid ${USER_UID} --gid ${USER_GID} -d /home/${USER}-dev -m ${USER} \
+    && useradd -l --uid ${USER_UID} --gid ${USER_GID} -d /home/${USER}-dev -m ${USER} \
     && apt-get update \
     && apt-get install bash-completion sudo \
     && echo ${USER} ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/${USER} \
