@@ -12,5 +12,5 @@
     "workspaceFolder": "${localWorkspaceFolder}",
     "privileged": true,
     "initializeCommand": "bash .devcontainer/startup.sh",
-    "image": "nvcr.io/nvidia/pytorch:23.05-py3---devcontainer"
+    "image": "python:3---devcontainer"
 }
