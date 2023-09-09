@@ -1,0 +1,21 @@
+{
+    "audioCues.volume": 0,
+    "dev.containers.defaultExtensions": [
+        "eamodio.gitlens",
+        "ms-azuretools.vscode-docker",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.mypy-type-checker",
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+    ],
+    "diffEditor.ignoreTrimWhitespace": false,
+    "editor.accessibilitySupport": "on",
+    "editor.rulers": [79],
+    "explorer.excludeGitIgnore": true,
+    "files.autoSave": "afterDelay",
+    "search.useGlobalIgnoreFiles": true,
+    "terminal.integrated.enableMultiLinePasteWarning": false,
+    "workbench.editor.untitled.hint": "hidden",
+    "[python]": {"editor.formatOnType": true}
+}
